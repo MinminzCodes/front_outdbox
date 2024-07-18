@@ -33,36 +33,41 @@ function Movies() {
   const fetchMovies = async () => {
     try {
       let filteredMoviesList = [];
-      for (let page = 1; page <= 5; page++) { // Itera sobre las primeras 5 páginas de películas
-        const response = await fetch(
-          `https://api-outdbox.onrender.com/api/now_playing_movies?page=${page}`
-        );
+      const seenMovieIds = new Set(); // Set para rastrear las películas únicas
+  
+      for (let page = 1; page <= 5; page++) {
+        const response = await fetch(`https://api-outdbox.onrender.com/api/now_playing_movies?page=${page}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-
-        // Aplica el filtro por género si hay un género seleccionado
+  
         let moviesToAdd = [...data];
         if (selectedGenre) {
           moviesToAdd = moviesToAdd.filter(movie => movie.genre_ids.includes(selectedGenre));
         }
-        filteredMoviesList = [...filteredMoviesList, ...moviesToAdd];
+  
+        // Filtrar películas duplicadas, me estaba dando error jasdjasd
+        moviesToAdd.forEach(movie => {
+          if (!seenMovieIds.has(movie.id)) {
+            seenMovieIds.add(movie.id);
+            filteredMoviesList.push(movie);
+          }
+        });
       }
-      
-      // Actualiza los estados con las películas obtenidas y filtradas
+  
       setAllMovies(filteredMoviesList);
       setFilteredMovies(filteredMoviesList); // Inicialmente, todas las películas están en la lista filtrada
-
-      // Calcula las películas a mostrar en la página actual según currentPage
+  
       const startIndex = (currentPage - 1) * 20;
       const endIndex = startIndex + 20;
       setDisplayedMovies(filteredMoviesList.slice(startIndex, endIndex));
-
+  
     } catch (error) {
       console.error("Error fetching movies:", error);
     }
   };
+  
   
   // Función para manejar la selección de género y actualizar el estado
   const handleGenreSelect = (genreId, genreName) => {
