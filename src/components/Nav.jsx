@@ -56,7 +56,7 @@ function Nav() {
                 <div className="flex items-center justify-center w-full md:w-48">
                     <div className="w-48">
                         {/* Cuando le damos al logo nos lleva al Home */}
-                       <Link to="/" onClick={scrollToTop}><img className="h-full" src="../src/img/logo_horizontal_diseno.png" alt="Imagen logotipo" /></Link>
+                       <Link to="/" onClick={scrollToTop}><img className="h-full" src="/img/logo_horizontal_diseno.png" alt="Imagen logotipo" /></Link>
                     </div>
                 </div>
                 {/* Menu de hamburguesa  */}
