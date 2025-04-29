@@ -12,9 +12,6 @@ function LoginModal({ isOpen, onClose }) {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
     setError(null); // Reinicia el estado de error antes de un nuevo intento de login
 
-    // Agrega un log para verificar que los datos de username y password se están enviando correctamente
-    console.log("Datos enviados al backend:", { username, password });
-
     try {
       const response = await fetch('https://api-outdbox.onrender.com/login', {
         method: 'POST',
